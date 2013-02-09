@@ -1,0 +1,7 @@
+MONITOR
+=====
+
+Monitor is a Linux Kernel module that
+obtains a process id  (pid) from launcher (via ioctl) 
+and stealthly monitors system calls of pid
+
