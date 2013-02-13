@@ -1,9 +1,15 @@
+/*
+02/08/2012
+bataille16@gmail.com
+
+User-level process launcher.
+*/
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#define TEST 19
 
 int main()
 {
