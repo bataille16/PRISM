@@ -1,4 +1,6 @@
 /*
+
+PRISM Project
 02/08/2012
 bataille16@gmail.com
 
@@ -20,9 +22,10 @@ and monitors sys calls made by pid
 #include <linux/sched.h>
 #include<linux/unistd.h>
 #include <linux/cpumask.h>
+
 //#include <linux/cpuidle.h>  --> modify cpuidle to get the work done
 
-
+#include "include/monitor_syscalls.h"
 
 // add pid parameter
 static int PID =0;
@@ -52,7 +55,7 @@ static int __init monitor(void)
 	// get cpu mask of bootstrap core (core 0 is safe assumption)
 	const struct cpumask  *mask =  get_cpu_mask(0);	
 	long monitor_affinity;
- 
+	
 	/*
 	 To get sched_setaffinity(pid, cpumask) to work in kernel mode, we have 2 options:
 		1- Export Symbol and re-compile kernel
@@ -68,14 +71,10 @@ static int __init monitor(void)
 	  and point it to the (local machine) address where the kernel function sched_setaffinity is located
 	  We can find that address in /boot/System.map . This value is static as it is after the kernel is compiled
 	*/
-	k_setaffinity = 0xc1055f90;		
+	k_setaffinity = 0xc1055f90;// causes a benign warning	
+       	monitor_affinity = k_setaffinity(0,mask); // set this process to this cpu 
 
-	// kernel module level core affinity setting for PID
-	//monitor_affinity = k_setaffinity(PID,mask); // set this process to this cpu 
 	
-	monitor_affinity = k_setaffinity(0,mask); // set this process to this cpu 
-	printk(KERN_INFO "Testing function pointer %d\n", monitor_affinity);
-
 	return 0;
 
 
